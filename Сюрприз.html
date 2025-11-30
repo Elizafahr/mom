@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>С Днём Мамы!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ffebee, #fce4ec, #f3e5f5);
+            min-height: 100vh;
+            overflow-x: hidden; /* Исправлено: было overflow: hidden */
+            position: relative;
+            color: #5a3d5c;
+        }
+
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #e91e63;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.2s ease;
+        }
+
+        .cursor-follower {
+            width: 8px;
+            height: 8px;
+            background: #e91e63;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform 0.1s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 0;
+            animation: fadeInDown 1s ease;
+        }
+
+        .title {
+            font-size: 4rem;
+            color: #e91e63;
+            text-shadow: 3px 3px 0px #ff80ab;
+            margin-bottom: 20px;
+            font-weight: bold;
+            animation: bounce 2s infinite;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #7b1fa2;
+            margin-bottom: 30px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+            margin: 40px 0;
+            min-height: 400px;
+        }
+
+        .message-box {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(233, 30, 99, 0.2);
+            backdrop-filter: blur(10px);
+            animation: slideInLeft 1s ease;
+        }
+
+        .message {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #333;
+            text-align: justify;
+        }
+
+        .photo-frame {
+            position: relative;
+            animation: slideInRight 1s ease;
+        }
+
+        .frame {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(45deg, #e91e63, #9c27b0);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 15px 35px rgba(156, 39, 176, 0.3);
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+
+        .frame:hover {
+            transform: rotateY(10deg) rotateX(5deg);
+        }
+
+        .heart-icon {
+            font-size: 8rem;
+            color: white;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        .flowers {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .flower {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.7;
+            animation: float 6s infinite ease-in-out;
+        }
+
+        .interactive-section {
+            text-align: center;
+            padding: 40px 0;
+            animation: fadeInUp 1s ease;
+        }
+
+        .love-button {
+            background: linear-gradient(45deg, #e91e63, #ff4081);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.4);
+        }
+
+        .love-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(233, 30, 99, 0.6);
+        }
+
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .floating-heart {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0;
+            animation: floatUp 4s ease-in forwards;
+        }
+
+        /* Новые секции для демонстрации прокрутки */
+        .additional-content {
+            margin: 60px 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .content-card {
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(233, 30, 99, 0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .content-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            color: #e91e63;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .card-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 40px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 20px;
+            box-shadow: 0 -5px 20px rgba(233, 30, 99, 0.1);
+        }
+
+        .footer-text {
+            font-size: 1.2rem;
+            color: #7b1fa2;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes heartbeat {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(10deg);
+            }
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(0deg);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) rotate(360deg);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .title {
+                font-size: 2.5rem;
+            }
+            
+            .message-box {
+                padding: 20px;
+            }
+            
+            .additional-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+    
+    <div class="hearts-container" id="heartsContainer"></div>
+    
+    <div class="container">
+        <header class="header">
+            <h1 class="title">💖 С Днём Мамы! 💖</h1>
+            <p class="subtitle">Самая добрая, самая нежная, самая любимая</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="message-box">
+                <p class="message">
+                    Дорогая мамочка! В этот особенный день я хочу сказать тебе, как сильно я тебя люблю! 
+                    Ты — мой самый главный человек в жизни, мой ангел-хранитель и лучший друг. 
+                    Спасибо за твою бесконечную заботу, теплоту и поддержку. 
+                    За то, что всегда верила в меня и помогала во всём. 
+                    Ты научила меня самому главному — любить и быть добрым. 
+                    Я бесконечно благодарен(-на) судьбе за то, что ты у меня есть! 
+                    Желаю тебе крепкого здоровья, бесконечного счастья и лучезарных улыбок! 
+                    Люблю тебя больше всех на свете! 💕
+                </p>
+            </div>
+            
+            <div class="photo-frame">
+                <div class="frame">
+                    <div class="heart-icon">💝</div>
+                </div>
+                <div class="flowers">
+                    <div class="flower" style="top: 10%; left: 10%;">🌹</div>
+                    <div class="flower" style="top: 20%; right: 15%;">🌺</div>
+                    <div class="flower" style="bottom: 30%; left: 20%;">🌸</div>
+                    <div class="flower" style="bottom: 15%; right: 25%;">💐</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="interactive-section">
+            <button class="love-button" id="loveButton">Отправить любовь! 💞</button>
+        </div>
+        
+        <!-- Добавленные секции для демонстрации прокрутки -->
+        <div class="additional-content">
+            <div class="content-card">
+                <h2 class="card-title">💕 Твоя забота</h2>
+                <p class="card-text">
+                    Ты всегда заботилась обо мне, даже когда сама уставала. 
+                    Твои нежные руки лечили все мои болячки, а твои объятия согревали в самые холодные дни. 
+                    Ты учила меня быть сильным и в то же время оставаться добрым.
+                </p>
+            </div>
+            
+            <div class="content-card">
+                <h2 class="card-title">🌟 Твоя мудрость</h2>
+                <p class="card-text">
+                    Твои советы всегда были самыми верными. Ты научила меня видеть красоту в простых вещах, 
+                    ценить каждый момент и никогда не сдаваться. Твоя мудрость — мой главный ориентир в жизни.
+                </p>
+            </div>
+            
+            <div class="content-card">
+                <h2 class="card-title">🌺 Твоя любовь</h2>
+                <p class="card-text">
+                    Твоя любовь безусловна и безгранична. Она даёт мне силы, вдохновение и веру в себя. 
+                    Благодаря тебе я знаю, что такое настоящая любовь, и стараюсь нести её в мир.
+                </p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p class="footer-text">Сделано с бесконечной любовью для самой лучшей мамы на свете! 💖</p>
+        </div>
+    </div>
+
+    <script>
+        // Анимированный курсор
+        const cursor = document.querySelector('.cursor');
+        const cursorFollower = document.querySelector('.cursor-follower');
+        
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            
+            setTimeout(() => {
+                cursorFollower.style.left = e.clientX + 'px';
+                cursorFollower.style.top = e.clientY + 'px';
+            }, 100);
+        });
+        
+        // Интерактивные элементы
+        const loveButton = document.getElementById('loveButton');
+        const heartsContainer = document.getElementById('heartsContainer');
+        
+        loveButton.addEventListener('click', function() {
+            // Анимация кнопки
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 150);
+            
+            // Создание летающих сердечек
+            createHearts(15);
+            
+            // Показать сообщение
+            showMessage('Любовь отправлена! 💖', 2000);
+        });
+        
+        function createHearts(count) {
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'floating-heart';
+                    heart.innerHTML = '💖';
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                    heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                    
+                    heartsContainer.appendChild(heart);
+                    
+                    // Удаление сердечка после анимации
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 4000);
+                }, i * 200);
+            }
+        }
+        
+        function showMessage(text, duration) {
+            const message = document.createElement('div');
+            message.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(255, 255, 255, 0.95);
+                padding: 20px 40px;
+                border-radius: 50px;
+                font-size: 1.5rem;
+                color: #e91e63;
+                box-shadow: 0 10px 30px rgba(233, 30, 99, 0.3);
+                z-index: 10000;
+                animation: fadeInOut ${duration}ms ease;
+            `;
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeInOut {
+                    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+                    20% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+                    40% { transform: translate(-50%, -50%) scale(1); }
+                    80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+                    100% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            message.textContent = text;
+            document.body.appendChild(message);
+            
+            setTimeout(() => {
+                message.remove();
+                style.remove();
+            }, duration);
+        }
+        
+        // Добавляем случайные анимации для цветов
+        const flowers = document.querySelectorAll('.flower');
+        flowers.forEach((flower, index) => {
+            flower.style.animationDelay = (index * 1.5) + 's';
+        });
+        
+        // Автовоспроизведение сердечек каждые 10 секунд
+        setInterval(() => {
+            createHearts(3);
+        }, 10000);
+        
+        // Параллакс эффект для фона
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            document.body.style.backgroundPosition = `${x * 50}px ${y * 50}px`;
+        });
+    </script>
+</body>
+</html>
